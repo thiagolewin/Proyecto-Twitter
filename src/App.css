@@ -20,9 +20,37 @@
   display: flex;
   width: 50vw;
   justify-content: space-between;
+  align-items: center;
 }
 .Inicio svg {
   width: 80%;
   cursor: pointer;
   height: auto;
+}
+.Inicio .arrow {
+  width: 200px;
+  height: auto;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.Inicio .arrow:disabled {
+  background-color: #ccc;
+  cursor: pointer;
+}
+.Inicio .arrow:hover {
+  background-color: white;
+}
+.Inicio .avatarChoose .svg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding:  10px 0;
+}
+.Inicio .avatarChoose .characterselected {
+  border: 3px solid white;
+}
+.Inicio .arrow img {
+  height: 100%;
+  width: 100%;
 }

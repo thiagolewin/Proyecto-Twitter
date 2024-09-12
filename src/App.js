@@ -1,9 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
 import { useEffect, useState } from 'react';
-
+import left from "./img/left.svg"
+import right from "./img/right.svg"
 function App() {
   const [avatars, setAvatars] = useState([])
+  const [offset, setOffset] = useState(5)
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [character,setcharacter] = useState({})
+  const [selectedIndex, setSelectedIndex] = useState(null);
   function generarStringAleatorio(longitud) {
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let resultado = '';
@@ -21,6 +26,25 @@ function App() {
     const svgText = await response.text();
     setAvatars([...avatars,svgText])
   }
+  const arrowLeft = ()=> {
+    if(offset >5) {
+      setOffset(offset-1)
+    }
+  }
+  const setCharacter = (e)=> {
+    console.log(e)
+  }
+  const arrowRight = ()=> {
+    setIsDisabled(true);
+    const timeoutDuration = 300;
+    setTimeout(() => {
+      setIsDisabled(false);
+  }, timeoutDuration);
+    setOffset(offset+1)
+    console.log(offset)
+    console.log(avatars.slice(offset-5,offset))
+    TraerAvatars(generarStringAleatorio(4))
+  }
   useEffect(()=> {
     const fetchAvatar = async () => {
       try {
@@ -36,7 +60,7 @@ function App() {
     };
     const fetchAvatars = async () => {
       try {
-        const avatarPromises = Array.from({ length: 5 }, () => fetchAvatar());
+        const avatarPromises = Array.from({ length: 7 }, () => fetchAvatar());
         const avatarSvgs = await Promise.all(avatarPromises);
         setAvatars(avatarSvgs);
       } catch (error) {
@@ -50,10 +74,24 @@ function App() {
   console.log(typeof(avatars));
   return (
     <section className='Inicio'>
-        <h1>TwiRandom</h1>
-        <div className='avatarChoose'> { avatars.map(svg=>(<div dangerouslySetInnerHTML={{ __html: svg }} />))}</div>
-       
-        
+      <h1>TwiRandom</h1>
+      <div className='avatarChoose'>
+        <button className='arrow' onClick={arrowLeft}>
+          <img src={left} alt="Left Arrow" />
+        </button>
+        {avatars.slice(offset - 5, offset).map((svg, index) => (
+          <div
+            key={index}
+            className={`character${selectedIndex === index ? 'selected' : ''}`}
+            onClick={() => setSelectedIndex(index)}
+          >
+            <div className='svg' dangerouslySetInnerHTML={{ __html: svg }} />
+          </div>
+        ))}
+        <button disabled={isDisabled} className='arrow' onClick={arrowRight}>
+          <img src={right} alt="Right Arrow" />
+        </button>
+      </div>
     </section>
   );
 }
